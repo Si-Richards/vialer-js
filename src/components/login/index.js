@@ -7,16 +7,16 @@ module.exports = (app) => {
     */
     const Login = {
         computed: app.helpers.sharedComputed(),
-        data: function() {
-            return {
-                password: '',
-                twoFactorToken: {message: '', valid: true, value: null},
-            }
-        },
         created: function() {
             // Restore password from state to local data if set.
             if (this.user.password) {
                 this.password = this.user.password
+            }
+        },
+        data: function() {
+            return {
+                password: '',
+                twoFactorToken: {message: '', valid: true, value: null},
             }
         },
         methods: Object.assign({
@@ -44,16 +44,16 @@ module.exports = (app) => {
                         })
                     } else {
                         app.emit('bg:user:login', {
-                            endpoint: this.settings.webrtc.endpoint.uri,
-                            password: this.password,
-                            username: this.user.username,
                             callback: ({twoFactor}) => {
                                 if (twoFactor) {
                                     // Save password in the (bg-)state, so that if the user
                                     // we still have the password for the next login.
                                     app.setState({user: {password: this.password}})
                                 }
-                            }
+                            },
+                            endpoint: this.settings.webrtc.endpoint.uri,
+                            password: this.password,
+                            username: this.user.username,
                         })
                     }
                 } else {
@@ -95,13 +95,6 @@ module.exports = (app) => {
         validations: function() {
             // Bind the API response message to the validator $params.
             let validations = {
-                user: {
-                    username: {
-                        requiredIf: v.requiredIf(() => {
-                            return !this.app.session.active
-                        }),
-                    },
-                },
                 password: {
                     minLength: v.minLength(6),
                     required: v.required,
@@ -117,6 +110,13 @@ module.exports = (app) => {
                         numeric: v.numeric,
                         requiredIf: v.requiredIf(() => {
                             return this.user.twoFactor
+                        }),
+                    },
+                },
+                user: {
+                    username: {
+                        requiredIf: v.requiredIf(() => {
+                            return !this.app.session.active
                         }),
                     },
                 },

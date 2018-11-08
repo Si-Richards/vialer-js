@@ -71,6 +71,7 @@ class Skeleton extends EventEmitter {
     * @param {Boolean|String} noIpc - Flag to skip ipc emission or to do `both`.
     * @param {Boolean|String} [tabId=false] - Emit to specific tab over ipc.
     * @param {Boolean|String} [parent=false] - Emit to script's parent over ipc.
+    * @returns {Promise} - Promise that will resolve when the emit is done - if availabl
     */
     emit(event, data = {}, noIpc = false, tabId = false, parent = false) {
         let promise
@@ -85,7 +86,7 @@ class Skeleton extends EventEmitter {
             } else if (parent) {
                 if (this.verbose) this.logger.debug(`${this}emit ipc event '${event}' to parent`)
                 parent.postMessage({data: data, event: event}, '*')
-                return
+                return undefined
             }
 
             if (data && data.callback) {

@@ -25,7 +25,7 @@ module.exports = (app) => {
              * @returns {Boolean} - Whether the field is valid or not.
              */
             invalidFieldValue: function() {
-                return this.validationMessage != ''
+                return this.validationMessage !== ''
             },
             /**
              * Match a validation error with a (translated) error message.
@@ -96,7 +96,7 @@ module.exports = (app) => {
         },
         data: function() {
             let data = {
-                fresh: true
+                fresh: true,
             }
 
             if (this.type === 'password') {

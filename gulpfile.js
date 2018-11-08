@@ -327,8 +327,8 @@ gulp.task('manifest', 'Generate a browser-specific manifest file.', (done) => {
 
 
 gulp.task('pre-commit-lint-js', () => {
-    return guppy.stream('pre-commit')
-        .pipe(filter(['*.js']))
+    return gulp.src(guppy.src('pre-commit'))
+        .pipe(filter(['**/*.js']))
         .pipe(eslint())
         .pipe(eslint.format())
         .pipe(eslint.failAfterError())
@@ -336,8 +336,8 @@ gulp.task('pre-commit-lint-js', () => {
 
 
 gulp.task('pre-commit-lint-sass', () => {
-    return guppy.stream('pre-commit')
-        .pipe(filter(['*.scss']))
+    return gulp.src(guppy.src('pre-commit'))
+        .pipe(filter(['**/*.scss']))
         .pipe(sassLint({
             config: '.sass-lint.yml',
         }))
@@ -347,7 +347,7 @@ gulp.task('pre-commit-lint-sass', () => {
 
 
 gulp.task('pre-commit-protect-secrets', () => {
-    return guppy.stream('pre-commit')
+    return gulp.src(guppy.src('pre-commit'))
         .pipe(filter(['.vialer-jsrc', '.vialer-jsrc.example']))
         .pipe(helpers.protectSecrets())
 })
